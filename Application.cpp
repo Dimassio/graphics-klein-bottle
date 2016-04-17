@@ -80,7 +80,8 @@ void Application::InitContext()
 	GLFWmonitor** monitors = glfwGetMonitors( &count );
 
 	if( count == 2 ) {
-		//Если 2 монитора, то запускаем приложение в полноэкранном режиме на 2м мониторе                
+		// Если 2 монитора, то запускаем приложение в полноэкранном режиме на 2м мониторе   
+		// Создаем графический контекст (окно)
 		window = glfwCreateWindow( 1920, 1080, "DZvonarev 296 group: Klein Bottle", monitors[1], NULL );
 	} else {
 		window = glfwCreateWindow( 800, 600, "DZvonarev 296 group: Klein Bottle", NULL, NULL );
@@ -90,13 +91,18 @@ void Application::InitContext()
 		glfwTerminate();
 		exit( 1 );
 	}
+	// Выбираем этот контекст
 	glfwMakeContextCurrent( window );
 
 	glfwSwapInterval( 0 ); //Отключаем вертикальную синхронизацию
 
-	glfwSetWindowUserPointer( window, this ); //Регистрируем указатель на данный объект, чтобы потом использовать его в функциях обратного вызова}
+	//Регистрируем указатель на данный объект, 
+	//чтобы потом использовать его в функциях обратного вызова
+	glfwSetWindowUserPointer( window, this );
 
-	glfwSetKeyCallback( window, keyCallback ); //Регистрирует функцию обратного вызова для обработки событий клавиатуры
+	//Регистрирует функцию обратного вызова для обработки событий клавиатуры
+	// ресайза, мыши, движения курсора и скролла
+	glfwSetKeyCallback( window, keyCallback );
 	glfwSetWindowSizeCallback( window, windowSizeChangedCallback );
 	glfwSetMouseButtonCallback( window, mouseButtonPressedCallback );
 	glfwSetCursorPosCallback( window, mouseCursosPosCallback );
@@ -119,15 +125,18 @@ void Application::InitGL()
 
 void Application::MakeScene()
 {
+	// Устанавливаем камеру
 	camera.viewMatrix = glm::lookAt( glm::vec3( 0.0f, -1.0f, 0.0f ), glm::vec3( 0.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ) );
+	// Перспективное проецирование (чем дальше объект, тем он меньше выглядит)
 	camera.projMatrix = glm::perspective( glm::radians( 45.0f ), 4.0f / 3.0f, 0.1f, 100.f );
 }
 
 void Application::Run()
 {
+	// Главный цикл
 	while( !glfwWindowShouldClose( window ) ) //Пока окно не закрыто
 	{
-		glfwPollEvents(); //Проверяем события ввода
+		glfwPollEvents(); //Проверяем события ввода, и вызываем соответствующую функцию обратного вызова
 
 		Update(); //Обновляем сцену и положение виртуальной камеры
 
@@ -207,8 +216,8 @@ void Application::Update()
 	thetaAng = glm::clamp( thetaAng, -glm::pi<double>() * 0.49, glm::pi<double>() * 0.49 );
 
 	//Вычисляем положение виртуальной камеры в мировой системе координат по формуле сферических координат
-	glm::vec3 pos = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ), 
-							   glm::sin( phiAng ) * glm::cos( thetaAng ), 
+	glm::vec3 pos = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
+							   glm::sin( phiAng ) * glm::cos( thetaAng ),
 							   glm::sin( thetaAng ) + 0.5f ) * ( float ) r;
 
 	//Обновляем матрицу вида

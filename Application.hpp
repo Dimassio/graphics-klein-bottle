@@ -3,6 +3,7 @@
 #include "Common.h"
 
 struct CameraInfo {
+	// Перевести координаты вершин из мировой системы координат в систему координат виртуальной камеры
 	glm::mat4 viewMatrix;
 	glm::mat4 projMatrix;
 };

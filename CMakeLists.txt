@@ -49,7 +49,6 @@ set(SHADER_FILES
 	296ZvonarevData/shader.frag
 )
 
-
 # Создаем исполняемый файл
 add_executable(296Zvonarev ${SRC_FILES} ${HEADER_FILES})
 	
@@ -60,4 +59,4 @@ target_link_libraries(296Zvonarev GLEW::glew_s glm glfw ASSIMP::assimp SOIL::soi
 install(TARGETS 296Zvonarev RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 # Копируем папку с ресурсами в папку ${CMAKE_INSTALL_PREFIX}
-install(DIRECTORY 296Zvonarev DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY 296ZvonarevData DESTINATION ${CMAKE_INSTALL_PREFIX})
