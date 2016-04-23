@@ -62,7 +62,6 @@ private:
 
 	// Источники света
 	LightInfo lights[NumberOfLights];
-	//MaterialInfo material;
 
 	void createMesh();
 	void drawMesh();

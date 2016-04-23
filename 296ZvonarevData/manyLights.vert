@@ -1,5 +1,6 @@
 /**
 Пофрагментное освещение несколькими источниками света
+Копирует на выход текстурные координаты.
 */
 
 #version 330
@@ -14,12 +15,15 @@ uniform mat3 normalToCameraMatrix;
 
 layout(location = 0) in vec3 vertexPosition; //координаты вершины в локальной системе координат
 layout(location = 1) in vec3 vertexNormal; //нормаль в локальной системе координат
+layout(location = 2) in vec2 vertexTexCoord; //текстурные координаты вершины
 
 out vec3 normalCamSpace; //нормаль в системе координат камеры
 out vec4 posCamSpace; //координаты вершины в системе координат камеры
+out vec2 texCoord; //текстурные координаты
 
 void main()
 {
+        texCoord = vertexTexCoord;
 	posCamSpace = viewMatrix * modelMatrix * vec4(vertexPosition, 1.0); //преобразование координат вершины в систему координат камеры
 	normalCamSpace = normalize(normalToCameraMatrix * vertexNormal); //преобразование нормали в систему координат камеры
 	

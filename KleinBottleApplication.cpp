@@ -34,8 +34,8 @@ void CKleinBottleApplication::MakeScene()
 	lights[0].ambient = glm::vec3( 0.2, 0.2, 0.2 );
 	lights[0].diffuse = glm::vec3( 0.8, 0.8, 0.8 );
 	lights[0].specular = glm::vec3( 1.0, 1.0, 1.0 );
-	// Летающий
 
+	// Летающий:
 	lights[1].position = glm::vec3( glm::cos( phi ) * glm::cos( theta ),
 									glm::sin( phi ) * glm::cos(theta ),
 									glm::sin( theta ) ) * lightR;
@@ -47,8 +47,8 @@ void CKleinBottleApplication::MakeScene()
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( thetaAng ) ) * (float) r;
-	lights[2].ambient = glm::vec3( 0.0, 0.2, 0.0 );
-	lights[2].diffuse = glm::vec3( 0.0, 0.8, 0.0 );
+	lights[2].ambient = glm::vec3( 0.2, 0.2, 0.2 );
+	lights[2].diffuse = glm::vec3( 0.8, 0.0, 0.0 );
 	lights[2].specular = glm::vec3( 1.0, 1.0, 1.0 );
 
 	//=========================================================
@@ -67,8 +67,7 @@ void CKleinBottleApplication::MakeScene()
 void CKleinBottleApplication::Update()
 {
 	Application::Update();
-	// todo: update movable coords and camera coords
-
+	// todo: update movable coords 
 }
 
 void CKleinBottleApplication::Draw()
@@ -90,9 +89,11 @@ void CKleinBottleApplication::Draw()
 	shader->setMat4Uniform( "viewMatrix", camera.viewMatrix );
 	shader->setMat4Uniform( "projectionMatrix", camera.projMatrix );
 
+	// Обновляем координаты движущегося источника
 	lights[1].position = glm::vec3( glm::cos( phi ) * glm::cos( theta ),
 									glm::sin( phi ) * glm::cos( theta ),
 									glm::sin( theta ) ) * ( float ) lightR;
+	// Обновляем координаты источника на камере
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( thetaAng ) ) * ( float ) r;
@@ -118,14 +119,11 @@ void CKleinBottleApplication::Draw()
 	shader->setIntUniform( "diffuseTex", 0 );
 	shader->setMat4Uniform( "modelMatrix", bottle->modelMatrix() );
 	shader->setMat3Uniform( "normalToCameraMatrix", glm::transpose( glm::inverse( glm::mat3( camera.viewMatrix * bottle->modelMatrix() ) ) ) );
-	/*shader->setVec3Uniform( "material.Ka", material.ambient );
-	shader->setVec3Uniform( "material.Kd", material.diffuse );
-	shader->setVec3Uniform( "material.Ks", material.specular );
-	shader->setFloatUniform( "material.shininess", material.shininess );*/
+
 	//Рисуем бутылку
 	drawMesh();
 
-	//Рисуем маркеры для всех источников света			
+	//Рисуем маркеры для всех источников света, кроме камеры		
 	{
 		markerShader->use();
 
