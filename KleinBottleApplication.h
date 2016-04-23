@@ -8,11 +8,23 @@
 #include <algorithm>
 
 struct LightInfo {
-	glm::vec3 position; //Будем здесь хранить координаты в мировой системе координат, а при копировании в юниформ-переменную конвертировать в систему виртуальной камеры
+	// Будем здесь хранить координаты в мировой системе координат, 
+	// а при копировании в юниформ-переменную конвертировать в систему виртуальной камеры
+	glm::vec3 position;
+
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 };
+
+struct MaterialInfo {
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	float shininess;
+};
+
+const size_t NumberOfLights = 3;
 
 class CKleinBottleApplication: public Application {
 public:
@@ -26,23 +38,31 @@ public:
 	void Draw() override;
 	void HandleKey( int key, int scancode, int action, int mod ) override;
 
-	
+
 private:
 	MeshPtr bottle;
+	MeshPtr marker;
+
+	// Для бутылки Клейна
 	ShaderProgramPtr shader;
+	// Для перемещающегося и фиксированного источников света
+	ShaderProgramPtr markerShader;
+
 	int detailed;
 	int minDetailed;
 	int maxDetailed;
 
 	TexturePtr worldTexture;
 	GLuint sampler;
-	ShaderProgramPtr markerShader;
-	//Переменные для управления положением одного источника света
-	float lr;
+
+	//Переменные для управления движущимся источника света
+	float lightR;
 	float phi;
 	float theta;
-	LightInfo light;
-	MeshPtr marker; //Меш - маркер для источника света
+
+	// Источники света
+	LightInfo lights[NumberOfLights];
+	//MaterialInfo material;
 
 	void createMesh();
 	void drawMesh();
