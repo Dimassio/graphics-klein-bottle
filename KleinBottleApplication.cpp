@@ -13,29 +13,27 @@ void CKleinBottleApplication::MakeScene()
 
 	// Шейдерная программа для фигуры    
 	shader = std::make_shared<ShaderProgram>();
-	shader->createProgram( "296ZvonarevData/manyLights.vert", "296ZvonarevData/manyLights.frag" );
+	shader->createProgram( "296ZvonarevData/LightsAndTexture.vert", "296ZvonarevData/LightsAndTexture.frag" );
 	
 	// Шейдерная программа для источника света
 	markerShader = std::make_shared<ShaderProgram>();
-	markerShader->createProgram( "296ZvonarevData/marker.vert", "296ZvonarevData/marker.frag" );
+	markerShader->createProgram( "296ZvonarevData/Marker.vert", "296ZvonarevData/Marker.frag" );
 	
 	//=========================================================
-	//Положение источника света
-	// todo: установить положениях ВСЕХ источников света
-	lightR = 3.0;
-	phi = 0;
-	theta = glm::pi<float>() * 0.5f;
-
 	// Характеристики света
-	// Фиксированный:
-	lights[0].position = glm::vec3( glm::cos( 6.0f ) * glm::cos( glm::pi<float>() * 0.5f ), 
-									glm::sin( 0.0f ) * glm::cos( glm::pi<float>() * 0.5f ), 
-									glm::sin( glm::pi<float>() * 0.5f ) ) * 6.0f;
+	lightR = 6.0;
+	phi = -2.0f * glm::pi<float>();
+	theta = -glm::pi<float>();
+
+	// Фиксированный (зеленого цвета):
+	lights[0].position = glm::vec3( glm::cos( phi ) * glm::cos( -glm::pi<float>() * 0.5f ),
+									glm::sin( phi ) * glm::cos( -glm::pi<float>() * 0.5f ),
+									glm::sin( -glm::pi<float>() * 0.5f ) ) * 4.0f;
 	lights[0].ambient = glm::vec3( 0.2, 0.2, 0.2 );
-	lights[0].diffuse = glm::vec3( 0.8, 0.8, 0.8 );
+	lights[0].diffuse = glm::vec3( 0.0, 0.5, 0.0 );
 	lights[0].specular = glm::vec3( 1.0, 1.0, 1.0 );
 
-	// Летающий:
+	// Летающий( белый ):
 	lights[1].position = glm::vec3( glm::cos( phi ) * glm::cos( theta ),
 									glm::sin( phi ) * glm::cos(theta ),
 									glm::sin( theta ) ) * lightR;
@@ -43,7 +41,7 @@ void CKleinBottleApplication::MakeScene()
 	lights[1].diffuse = glm::vec3( 0.8, 0.8, 0.8 );
 	lights[1].specular = glm::vec3( 1.0, 1.0, 1.0 );
 
-	// На камере:
+	// На камере (красного цвета, будто идет съемка):
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( thetaAng ) ) * (float) r;
@@ -53,7 +51,7 @@ void CKleinBottleApplication::MakeScene()
 
 	//=========================================================
 	//Загрузка и создание текстур
-	worldTexture = loadTexture( "296ZvonarevData/earth_global.jpg" );
+	worldTexture = loadTexture( "296ZvonarevData/picture.jpg" );
 
 	//=========================================================
 	//Инициализация сэмплера, объекта, который хранит параметры чтения из текстуры
@@ -67,7 +65,7 @@ void CKleinBottleApplication::MakeScene()
 void CKleinBottleApplication::Update()
 {
 	Application::Update();
-	// todo: update movable coords 
+	moveLightSource( 0.005f );
 }
 
 void CKleinBottleApplication::Draw()
@@ -85,6 +83,7 @@ void CKleinBottleApplication::Draw()
 	//Устанавливаем шейдер
 	shader->use();
 
+
 	//Устанавливаем общие юниформ-переменные
 	shader->setMat4Uniform( "viewMatrix", camera.viewMatrix );
 	shader->setMat4Uniform( "projectionMatrix", camera.projMatrix );
@@ -93,10 +92,12 @@ void CKleinBottleApplication::Draw()
 	lights[1].position = glm::vec3( glm::cos( phi ) * glm::cos( theta ),
 									glm::sin( phi ) * glm::cos( theta ),
 									glm::sin( theta ) ) * ( float ) lightR;
+
 	// Обновляем координаты источника на камере
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( thetaAng ) ) * ( float ) r;
+
 	// Положение уже в системе виртуальной камеры
 	for( size_t i = 0; i < NumberOfLights; ++i ) {
 		std::string currLight = "light[" + std::to_string( i ) + "]";
@@ -126,8 +127,8 @@ void CKleinBottleApplication::Draw()
 	//Рисуем маркеры для всех источников света, кроме камеры		
 	{
 		markerShader->use();
-
-		for( size_t i = 0; i < NumberOfLights; ++i ) {
+		// -1, чтобы под камерой не отображался
+		for( size_t i = 0; i < NumberOfLights - 1; ++i ) {
 			markerShader->setMat4Uniform( "mvpMatrix", camera.projMatrix * camera.viewMatrix * glm::translate( glm::mat4( 1.0f ), lights[i].position ) );
 			markerShader->setVec4Uniform( "color", glm::vec4( lights[i].diffuse, 1.0f ) );
 			marker->draw();
@@ -163,4 +164,13 @@ void CKleinBottleApplication::drawMesh()
 {
 	shader->setMat4Uniform( "modelMatrix", bottle->modelMatrix() );
 	bottle->draw();
+}
+
+void CKleinBottleApplication::moveLightSource( const float delta )
+{
+	if( phi + delta > 2.0f * glm::pi<float>() ) {
+		phi = -2.0f * glm::pi<float>();
+	} else {
+		phi += delta;
+	}
 }

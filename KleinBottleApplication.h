@@ -17,13 +17,6 @@ struct LightInfo {
 	glm::vec3 specular;
 };
 
-struct MaterialInfo {
-	glm::vec3 ambient;
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-	float shininess;
-};
-
 const size_t NumberOfLights = 3;
 
 class CKleinBottleApplication: public Application {
@@ -37,7 +30,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	void HandleKey( int key, int scancode, int action, int mod ) override;
-
 
 private:
 	MeshPtr bottle;
@@ -65,4 +57,6 @@ private:
 
 	void createMesh();
 	void drawMesh();
+	// Перемещаем источник света на delta радиан
+	void moveLightSource( const float delta );
 };

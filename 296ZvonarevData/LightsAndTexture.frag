@@ -40,14 +40,14 @@ void main()
 	{
 		vec3 lightDirCamSpace = normalize(light[i].pos - posCamSpace.xyz); //направление на источник света
 
-                // Для того, чтобы при увеличении расстояния свет тоже отдалялся:
-                //float distance = length(light[i].pos - posCamSpace.xyz);
-                //float attenuation = 1.0 / (0.1 + 0.01 * distance + 0.01 * distance * distance);
+                // Для того, чтобы при увеличении расстояния, влияние света становилось меньше
+                float distance = length(light[i].pos - posCamSpace.xyz);
+                float attenuation = 1.0 / (1 + 0.05 * distance + 0.05 * distance * distance);
 
 
 		float NdotL = max(dot(normal, lightDirCamSpace.xyz), 0.0); //скалярное произведение (косинус)
 
-		color += (light[i].La + light[i].Ld * NdotL) * diffuseColor; //* attenuation; //цвет вершины
+		color += (light[i].La + light[i].Ld * NdotL) * diffuseColor * attenuation; //цвет вершины
 
 		if (NdotL > 0.0)
 		{			
@@ -55,7 +55,7 @@ void main()
 
 			float blinnTerm = max(dot(normal, halfVector), 0.0); //интенсивность бликового освещения по Блинну				
 			blinnTerm = pow(blinnTerm, shininess); //регулируем размер блика
-			color += light[i].Ls * Ks * blinnTerm; //* attenuation;
+			color += light[i].Ls * Ks * blinnTerm * attenuation;
 		}
 	}
 
