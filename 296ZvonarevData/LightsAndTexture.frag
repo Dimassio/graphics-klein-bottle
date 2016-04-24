@@ -43,7 +43,6 @@ void main()
                 float distance = length(light[i].pos - posCamSpace.xyz);
                 float attenuation = 1.0 / (1 + 0.05 * distance + 0.05 * distance * distance);
 
-
 		float NdotL = max(dot(normal, lightDirCamSpace.xyz), 0.0); //скалярное произведение (косинус)
 
 		color += (light[i].La + (light[i].Ld * NdotL) * diffuseColor) * attenuation; //цвет вершины
@@ -58,22 +57,21 @@ void main()
 		}
 	}
 
-        // Для фонарика добавлен Spot light:
+        // Для фонарика(3 источник света) добавлен Spot light:
         vec3 lightDirCamSpace = normalize(light[2].pos - posCamSpace.xyz); //направление на источник света
 
-        // Spot light
-        vec3 spotDirection = posCamSpace.xyz - light[2].pos;
+        vec3 spotDirection = -normalCamSpace.xyz;
 
         float spotEffect = dot(normalize(spotDirection), normalize(-lightDirCamSpace));
-        float spotCosCutoff = radians(3.0);
+        float spotCosCutoff = radians(0.5f);
         if (spotEffect > spotCosCutoff) {
-                float spotExponent = 0.0f;
+                // Характер пятна
+                float spotExponent = 15.0f;
                 spotEffect = pow(spotEffect, spotExponent);
 
                 // Для того, чтобы при увеличении расстояния, влияние света становилось меньше
                 float distance = length(light[2].pos - posCamSpace.xyz);
-                float attenuation = spotEffect / (1 + 0.05 * distance + 0.05 * distance * distance);
-
+                float attenuation = spotEffect / (1 + 0.25 * distance);
 
 		float NdotL = max(dot(normal, lightDirCamSpace.xyz), 0.0); //скалярное произведение (косинус)
 

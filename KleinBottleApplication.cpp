@@ -14,11 +14,11 @@ void CKleinBottleApplication::MakeScene()
 	// Шейдерная программа для фигуры    
 	shader = std::make_shared<ShaderProgram>();
 	shader->createProgram( "296ZvonarevData/LightsAndTexture.vert", "296ZvonarevData/LightsAndTexture.frag" );
-	
+
 	// Шейдерная программа для источника света
 	markerShader = std::make_shared<ShaderProgram>();
 	markerShader->createProgram( "296ZvonarevData/Marker.vert", "296ZvonarevData/Marker.frag" );
-	
+
 	//=========================================================
 	// Характеристики света
 	lightR = 6.0;
@@ -35,7 +35,7 @@ void CKleinBottleApplication::MakeScene()
 
 	// Летающий( белый ):
 	lights[1].position = glm::vec3( glm::cos( phi ) * glm::cos( theta ),
-									glm::sin( phi ) * glm::cos(theta ),
+									glm::sin( phi ) * glm::cos( theta ),
 									glm::sin( theta ) ) * lightR;
 	lights[1].ambient = glm::vec3( 0.2, 0.2, 0.2 );
 	lights[1].diffuse = glm::vec3( 0.8, 0.8, 0.8 );
@@ -44,9 +44,9 @@ void CKleinBottleApplication::MakeScene()
 	// На камере (красного цвета, будто идет съемка):
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
-									glm::sin( thetaAng ) ) * (float) r;
+									glm::sin( thetaAng ) ) * ( float ) r;
 	lights[2].ambient = glm::vec3( 0.2, 0.2, 0.2 );
-	lights[2].diffuse = glm::vec3( 0.8, 0.0, 0.0 );
+	lights[2].diffuse = glm::vec3( 1.0, 0.0, 0.0 );
 	lights[2].specular = glm::vec3( 1.0, 1.0, 1.0 );
 
 	//=========================================================
