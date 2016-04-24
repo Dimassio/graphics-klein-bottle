@@ -23,6 +23,7 @@ set(SRC_FILES
         KleinBottleApplication.cpp
         Mesh.cpp
         ShaderProgram.cpp
+        Texture.cpp
         imgui/imgui.cpp
         imgui/imgui_demo.cpp
         imgui/imgui_draw.cpp
@@ -35,6 +36,7 @@ set(HEADER_FILES
         KleinBottleApplication.h
         Mesh.hpp
         ShaderProgram.hpp
+        Texture.hpp
         imgui/imconfig.h
         imgui/imgui.h
         imgui/imgui_impl_glfw_gl3.h
@@ -45,8 +47,10 @@ set(HEADER_FILES
 )
 
 set(SHADER_FILES
-	296ZvonarevData/shader.vert
-	296ZvonarevData/shader.frag
+	296ZvonarevData/LightsAndTexture.vert
+	296ZvonarevData/LightsAndTexture.frag
+        296ZvonarevData/Marker.frag
+        296ZvonarevData/Marker.vert
 )
 
 # Создаем исполняемый файл
