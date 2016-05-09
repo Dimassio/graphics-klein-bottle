@@ -155,7 +155,10 @@ void CKleinBottleApplication::HandleKey( int key, int scancode, int action, int 
 
 void CKleinBottleApplication::createMesh()
 {
-	bottle = makeKleinBottle( 3.0f, detailed );
+	bottle = makeKleinBottle( glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
+										 glm::sin( phiAng ) * glm::cos( thetaAng ),
+										 glm::sin( thetaAng ) ) * ( float ) r, 
+							  3.0f, detailed );
 	// Матрица переноса на (-5; 0; -1.5)
 	bottle->setModelMatrix( glm::translate( glm::mat4( 1.0f ), glm::vec3( -5.0f, 0.0f, -1.5f ) ) );
 }

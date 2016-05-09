@@ -24,7 +24,19 @@ glm::vec3 normal( const float u, const float v )
 	return glm::normalize( glm::vec3( cos( u ) * sin( v ), sin( u ) * sin( v ), cos( v ) ) );
 }
 
-MeshPtr makeKleinBottle( const float radius, const size_t N )
+// todo:
+float invert( glm::vec3 normal, glm::vec3 dirToCamera )
+{
+	float res = glm::dot( normal, dirToCamera );
+	if( res > 0 ) {
+		// Сонаправлены
+		return 1.0f;
+	} else {
+		return -1.0f;
+	}
+}
+
+MeshPtr makeKleinBottle( glm::vec3 cameraCoords, const float radius, const size_t N )
 {
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
@@ -59,13 +71,13 @@ MeshPtr makeKleinBottle( const float radius, const size_t N )
 			vertices.push_back( point2 );
 			vertices.push_back( point3 );
 
-			normals.push_back( normal( u1, v1 ) );
-			normals.push_back( normal( u2, v1 ) );
-			normals.push_back( normal( u2, v2 ) );
+			normals.push_back( normal( u1, v1 ) * invert( normal( u1, v1 ), cameraCoords - point1) );
+			normals.push_back( normal( u2, v1 ) * invert( normal( u2, v1 ), cameraCoords - point2 ) );
+			normals.push_back( normal( u2, v2 ) * invert( normal( u2, v2 ), cameraCoords - point3 ) );
 
-			normals.push_back( normal( u1, v1 ) );
-			normals.push_back( normal( u2, v2 ) );
-			normals.push_back( normal( u1, v2 ) );
+			normals.push_back( normal( u1, v1 ) * invert( normal( u1, v1 ), cameraCoords - point4 ) );
+			normals.push_back( normal( u2, v2 ) * invert( normal( u2, v2 ), cameraCoords - point2 ) );
+			normals.push_back( normal( u1, v2 ) * invert( normal( u1, v2 ), cameraCoords - point3 ) );
 
 			texcoords.push_back( glm::vec2( ( float ) j / N, 1.0f - ( float ) i / N ) );
 			texcoords.push_back( glm::vec2( ( float ) ( j + 1 ) / N, 1.0f - ( float ) ( i + 1 ) / N ) );
