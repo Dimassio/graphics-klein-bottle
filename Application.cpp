@@ -28,12 +28,11 @@ void scrollCallback( GLFWwindow* window, double xoffset, double yoffset )
 	app->HandleScroll( xoffset, yoffset );
 }
 
-Application::Application( bool hasGUI ):
+Application::Application():
 	oldTime( 0.0 ),
 	phiAng( 0.0 ),
 	thetaAng( 0.0 ),
 	r( 5.0 ),
-	hasGUI( hasGUI ),
 	oldXPos( 0 ),
 	oldYPos( 0 )
 {
@@ -41,9 +40,6 @@ Application::Application( bool hasGUI ):
 
 Application::~Application()
 {
-	if( hasGUI ) {
-		ImGui_ImplGlfwGL3_Shutdown();
-	}
 	glfwTerminate();
 }
 
@@ -52,10 +48,6 @@ void Application::Start()
 	InitContext();
 
 	InitGL();
-
-	if( hasGUI ) {
-		InitGUI();
-	}
 
 	MakeScene();
 
@@ -140,15 +132,7 @@ void Application::Run()
 
 		Update(); //Обновляем сцену и положение виртуальной камеры
 
-		if( hasGUI ) {
-			UpdateGUI();
-		}
-
 		Draw(); //Рисуем один кадр
-
-		if( hasGUI ) {
-			DrawGUI();
-		}
 
 		glfwSwapBuffers( window ); //Переключаем передний и задний буферы
 	}
@@ -234,21 +218,4 @@ void Application::Update()
 
 void Application::Draw()
 {
-}
-
-//====================================================
-
-void Application::InitGUI()
-{
-	ImGui_ImplGlfwGL3_Init( window, false );
-}
-
-void Application::UpdateGUI()
-{
-	ImGui_ImplGlfwGL3_NewFrame();
-}
-
-void Application::DrawGUI()
-{
-	ImGui::Render();
 }

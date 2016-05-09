@@ -10,7 +10,7 @@ struct CameraInfo {
 
 class Application {
 public:
-	Application( bool hasGUI = true );
+	Application();
 	~Application();
 
 	/**
@@ -46,11 +46,6 @@ protected:
 	virtual void InitGL();
 
 	/**
-	Инициализирует графический интерфейс пользователя
-	*/
-	virtual void InitGUI();
-
-	/**
 	Создает трехмерную сцену
 	*/
 	virtual void MakeScene();
@@ -66,19 +61,9 @@ protected:
 	virtual void Update();
 
 	/**
-	Выполняет обновление графического интерфейса пользователя
-	*/
-	virtual void UpdateGUI();
-
-	/**
 	Отрисовывает один кадр
 	*/
 	virtual void Draw();
-
-	/**
-	Отрисовывает графический интерфейс пользователя
-	*/
-	virtual void DrawGUI();
 
 	//---------------------------------------------
 
@@ -97,6 +82,4 @@ protected:
 	//Положение курсора мыши на предыдущем кадре
 	double oldXPos;
 	double oldYPos;
-
-	bool hasGUI;
 };

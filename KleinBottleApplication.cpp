@@ -38,14 +38,14 @@ void CKleinBottleApplication::MakeScene()
 									glm::sin( phi ) * glm::cos( theta ),
 									glm::sin( theta ) ) * lightR;
 	lights[1].ambient = glm::vec3( 0.2, 0.2, 0.2 );
-	lights[1].diffuse = glm::vec3( 0.8, 0.8, 0.8 );
-	lights[1].specular = glm::vec3( 1.0, 1.0, 1.0 );
+	lights[1].diffuse = glm::vec3( 1.0, 1.0, 1.0 );
+	lights[1].specular = glm::vec3( 0.2, 0.2, 0.2 );
 
 	// На камере (красного цвета, будто идет съемка):
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( thetaAng ) ) * ( float ) r;
-	lights[2].ambient = glm::vec3( 0.2, 0.2, 0.2 );
+	lights[2].ambient = glm::vec3( 1.0, 0.2, 0.2 ); 
 	lights[2].diffuse = glm::vec3( 1.0, 0.0, 0.0 );
 	lights[2].specular = glm::vec3( 1.0, 1.0, 1.0 );
 

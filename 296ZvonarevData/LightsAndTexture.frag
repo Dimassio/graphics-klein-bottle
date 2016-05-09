@@ -60,13 +60,13 @@ void main()
         // Для фонарика(3 источник света) добавлен Spot light:
         vec3 lightDirCamSpace = normalize(light[2].pos - posCamSpace.xyz); //направление на источник света
 
-        vec3 spotDirection = -normalCamSpace.xyz;
+        vec3 spotDirection = vec3(0, 0, -1);
 
         float spotEffect = dot(normalize(spotDirection), normalize(-lightDirCamSpace));
-        float spotCosCutoff = radians(0.5f);
+        float spotCosCutoff = 0.99f; // Чем больше ->1, тем меньше угол -> тем меньше пятно
         if (spotEffect > spotCosCutoff) {
                 // Характер пятна
-                float spotExponent = 15.0f;
+                float spotExponent = 16.0f;
                 spotEffect = pow(spotEffect, spotExponent);
 
                 // Для того, чтобы при увеличении расстояния, влияние света становилось меньше
@@ -85,6 +85,7 @@ void main()
 			blinnTerm = pow(blinnTerm, shininess); //регулируем размер блика
 			color += light[2].Ls * Ks * blinnTerm * attenuation;
 		}
+
         }
-	fragColor = vec4(color, 1.0);
+        fragColor = vec4(color, 1.0);
 }

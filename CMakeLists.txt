@@ -24,10 +24,6 @@ set(SRC_FILES
         Mesh.cpp
         ShaderProgram.cpp
         Texture.cpp
-        imgui/imgui.cpp
-        imgui/imgui_demo.cpp
-        imgui/imgui_draw.cpp
-        imgui/imgui_impl_glfw_gl3.cpp
 )
 
 set(HEADER_FILES
@@ -37,13 +33,6 @@ set(HEADER_FILES
         Mesh.hpp
         ShaderProgram.hpp
         Texture.hpp
-        imgui/imconfig.h
-        imgui/imgui.h
-        imgui/imgui_impl_glfw_gl3.h
-        imgui/imgui_internal.h
-        imgui/stb_rect_pack.h
-        imgui/stb_textedit.h
-        imgui/stb_truetype.h
 )
 
 set(SHADER_FILES
