@@ -44,7 +44,7 @@ void CKleinBottleApplication::MakeScene()
 	// На камере (красного цвета, будто идет съемка):
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
-									glm::sin( thetaAng ) ) * ( float ) r;
+									glm::sin( thetaAng ) + 0.707f ) * ( float ) r;
 	lights[2].ambient = glm::vec3( 1.0, 0.2, 0.2 ); 
 	lights[2].diffuse = glm::vec3( 1.0, 0.0, 0.0 );
 	lights[2].specular = glm::vec3( 1.0, 1.0, 1.0 );
@@ -96,7 +96,7 @@ void CKleinBottleApplication::Draw()
 	// Обновляем координаты источника на камере
 	lights[2].position = glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
 									glm::sin( phiAng ) * glm::cos( thetaAng ),
-									glm::sin( thetaAng ) ) * ( float ) r;
+									glm::sin( thetaAng ) + 0.707f ) * ( float ) r;
 
 	// Положение уже в системе виртуальной камеры
 	for( size_t i = 0; i < NumberOfLights; ++i ) {
@@ -155,10 +155,7 @@ void CKleinBottleApplication::HandleKey( int key, int scancode, int action, int 
 
 void CKleinBottleApplication::createMesh()
 {
-	bottle = makeKleinBottle( glm::vec3( glm::cos( phiAng ) * glm::cos( thetaAng ),
-										 glm::sin( phiAng ) * glm::cos( thetaAng ),
-										 glm::sin( thetaAng ) ) * ( float ) r, 
-							  3.0f, detailed );
+	bottle = makeKleinBottle( 3.0f, detailed );
 	// Матрица переноса на (-5; 0; -1.5)
 	bottle->setModelMatrix( glm::translate( glm::mat4( 1.0f ), glm::vec3( -5.0f, 0.0f, -1.5f ) ) );
 }
