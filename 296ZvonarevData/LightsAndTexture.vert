@@ -26,6 +26,10 @@ void main()
         texCoord = vertexTexCoord;
 	posCamSpace = viewMatrix * modelMatrix * vec4(vertexPosition, 1.0); //преобразование координат вершины в систему координат камеры
 	normalCamSpace = normalize(normalToCameraMatrix * vertexNormal); //преобразование нормали в систему координат камеры
+        if( dot(normalCamSpace, -posCamSpace.xyz) < 0) {
+            normalCamSpace *= -1.0f;
+        }
+
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1.0);
 }

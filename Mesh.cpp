@@ -19,9 +19,19 @@ glm::vec3 point( const float r, const float u, const float v )
 	return point;
 }
 
-glm::vec3 normal( const float u, const float v )
+glm::vec3 normal( const float r, const float u, const float v )
 {
-	return glm::normalize( glm::vec3( cos( u ) * sin( v ), sin( u ) * sin( v ), cos( v ) ) );
+	float dXdU = -sin( u ) * ( r + cos( u / 2 ) * sin( v ) - sin( u / 2 ) * sin( 2 * v ) ) -
+		cos( u ) * ( sin( v ) * sin( u / 2 ) / 2 + cos( u / 2 ) * sin( 2 * v ) / 2 );
+	float dXdV = cos( u ) * ( cos( v ) * cos( u / 2 ) - 2 * sin( u / 2 ) * cos( 2 * v ) );
+	float dYdU = cos( u ) * ( r + cos( u / 2 ) * sin( v ) - sin( u / 2 ) * sin( 2 * v ) ) -
+		sin( u ) * ( sin( v ) * sin( u / 2 ) / 2 + cos( u / 2 ) * sin( 2 * v ) / 2 );
+	float dYdV = sin( u ) * ( cos( v ) * cos( u / 2 ) - 2 * sin( u / 2 ) * cos( 2 * v ) );
+	float dZdU = sin( v ) * cos( u / 2 ) / 2 - sin( u / 2 ) * sin( 2 * v ) / 2;
+	float dZdV = sin( u / 2 ) * cos( v ) + 2 * cos( u / 2 ) * cos( 2 * v );
+	glm::vec3 dFdU = glm::vec3( dXdU, dYdU, dZdU );
+	glm::vec3 dFdV = glm::vec3( dXdV, dYdV, dZdV );
+	return glm::normalize( glm::cross( dFdU, dFdV ) );
 }
 
 MeshPtr makeKleinBottle( const float radius, const size_t N )
@@ -30,12 +40,12 @@ MeshPtr makeKleinBottle( const float radius, const size_t N )
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texcoords;
 	for( size_t i = 0; i < N; i++ ) { // [-pi, pi]
-		float v1 = -( float ) M_PI + 2.0f * ( float ) M_PI * i / N;  
-		float v2 = -( float ) M_PI + 2.0f * ( float ) M_PI * ( i + 1 ) / N; 
+		float v1 = -( float ) M_PI + 2.0f * ( float ) M_PI * i / N;
+		float v2 = -( float ) M_PI + 2.0f * ( float ) M_PI * ( i + 1 ) / N;
 
 		for( size_t j = 0; j < N; j++ ) { // [0, 2pi]
-			float u1 = 2.0f * ( float ) M_PI * j / N; 
-			float u2 = 2.0f * ( float ) M_PI * ( j + 1 ) / N; 
+			float u1 = 2.0f * ( float ) M_PI * j / N;
+			float u2 = 2.0f * ( float ) M_PI * ( j + 1 ) / N;
 
 			glm::vec3 point1, point2, point3, point4;
 			point1 = point( radius, u1, v1 );
@@ -48,14 +58,14 @@ MeshPtr makeKleinBottle( const float radius, const size_t N )
 			vertices.push_back( point2 );
 			vertices.push_back( point3 );
 
-			normals.push_back( normal( u1, v1 ) );
-			normals.push_back( normal( u2, v1 ) );
-			normals.push_back( normal( u1, v2 ) );
+			normals.push_back( normal( radius, u1, v1 ) );
+			normals.push_back( normal( radius, u2, v1 ) );
+			normals.push_back( normal( radius, u1, v2 ) );
 
 			// s, t координаты, 
 			texcoords.push_back( glm::vec2( ( float ) j / N, 1.0f - ( float ) i / N ) );
 			texcoords.push_back( glm::vec2( ( float ) ( j + 1 ) / N, 1.0f - ( float ) i / N ) );
-			texcoords.push_back( glm::vec2( ( float ) ( j) / N, 1.0f - ( float ) ( i + 1 ) / N ) ); 
+			texcoords.push_back( glm::vec2( ( float ) ( j ) / N, 1.0f - ( float ) ( i + 1 ) / N ) );
 
 			//Второй треугольник
 
@@ -63,12 +73,12 @@ MeshPtr makeKleinBottle( const float radius, const size_t N )
 			vertices.push_back( point2 );
 			vertices.push_back( point3 );
 
-			normals.push_back( normal( u2, v2 ) );
-			normals.push_back( normal( u2, v1 ) );
-			normals.push_back( normal( u1, v2 ) );
+			normals.push_back( normal( radius, u2, v2 ) );
+			normals.push_back( normal( radius, u2, v1 ) );
+			normals.push_back( normal( radius, u1, v2 ) );
 
-			texcoords.push_back( glm::vec2( ( float ) (j + 1) / N, 1.0f - ( float ) (i + 1) / N ) ); 
-			texcoords.push_back( glm::vec2( ( float ) ( j + 1 ) / N, 1.0f - ( float ) ( i ) / N ) ); 
+			texcoords.push_back( glm::vec2( ( float ) ( j + 1 ) / N, 1.0f - ( float ) ( i + 1 ) / N ) );
+			texcoords.push_back( glm::vec2( ( float ) ( j + 1 ) / N, 1.0f - ( float ) ( i ) / N ) );
 			texcoords.push_back( glm::vec2( ( float ) j / N, 1.0f - ( float ) ( i + 1 ) / N ) );
 		}
 	}
