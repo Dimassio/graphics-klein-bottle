@@ -1,5 +1,6 @@
 #pragma once
 
+// Чтобы все glm - функции принимали радианы, а не градусы
 #define GLM_FORCE_RADIANS
 
 #include <glm/glm.hpp>

@@ -210,7 +210,7 @@ protected:
 typedef std::shared_ptr<Mesh> MeshPtr;
 
 // Создает модель бутылки Клейна
-MeshPtr makeKleinBottle( glm::vec3 cameraCoords, float radius, unsigned int N = 100 );
+MeshPtr makeKleinBottle( float radius, unsigned int N = 100 );
 
 // Создает модель сферы
 MeshPtr makeSphere( float radius, unsigned int N = 100 );
