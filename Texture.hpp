@@ -98,25 +98,7 @@ protected:
 };
 
 typedef std::shared_ptr<Texture> TexturePtr;
-
-//=========== Функции для создания текстур
-
 /**
 Загружает текстуру из файла PNG, JPEG и других форматов
 */
 TexturePtr loadTexture(const std::string& filename, bool gamma = false, bool withAlpha = false);
-
-/**
-Загружает текстуру из файла DDS
-*/
-TexturePtr loadTextureDDS(const std::string& filename);
-
-/**
-Загружает кубическую текстуру
-*/
-TexturePtr loadCubeTexture(const std::string& basefilename);
-
-/**
-Пример программной генерации текстуры
-*/
-TexturePtr makeProceduralTexture();
