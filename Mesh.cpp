@@ -34,7 +34,7 @@ glm::vec3 normal( const float r, const float u, const float v )
 	return glm::normalize( glm::cross( dFdU, dFdV ) );
 }
 
-MeshPtr makeKleinBottle( const float radius, const size_t N )
+MeshPtr makeKleinBottle( const float radius, size_t N )
 {
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;

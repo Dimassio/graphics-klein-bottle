@@ -83,7 +83,6 @@ void CKleinBottleApplication::Draw()
 	//Устанавливаем шейдер
 	shader->use();
 
-
 	//Устанавливаем общие юниформ-переменные
 	shader->setMat4Uniform( "viewMatrix", camera.viewMatrix );
 	shader->setMat4Uniform( "projectionMatrix", camera.projMatrix );
@@ -111,9 +110,11 @@ void CKleinBottleApplication::Draw()
 		shader->setVec3Uniform( currLight + ".Ls", lights[i].specular );
 	}
 
-	glActiveTexture( GL_TEXTURE0 );  // текстурный юнит 0        
+	glActiveTexture( GL_TEXTURE0 );  // текстурный юнит 0     
+	// Привязываем текстуру на основную фигуру
 	worldTexture->bind();
 
+	// Привязываем на сэмплер?
 	glBindSampler( 0, sampler );
 
 	//Загружаем на видеокарту матрицы модели мешей и запускаем отрисовку
@@ -131,6 +132,7 @@ void CKleinBottleApplication::Draw()
 		for( size_t i = 0; i < NumberOfLights - 1; ++i ) {
 			markerShader->setMat4Uniform( "mvpMatrix", camera.projMatrix * camera.viewMatrix * glm::translate( glm::mat4( 1.0f ), lights[i].position ) );
 			markerShader->setVec4Uniform( "color", glm::vec4( lights[i].diffuse, 1.0f ) );
+			// Запускаем рендеринг маркеров
 			marker->draw();
 		}
 	}
@@ -163,6 +165,7 @@ void CKleinBottleApplication::createMesh()
 void CKleinBottleApplication::drawMesh()
 {
 	shader->setMat4Uniform( "modelMatrix", bottle->modelMatrix() );
+	// Запускает рендеринг
 	bottle->draw();
 }
 

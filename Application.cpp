@@ -70,7 +70,6 @@ void Application::InitContext()
 
 	int count;
 	GLFWmonitor** monitors = glfwGetMonitors( &count );
-
 	if( count == 2 ) {
 		// Если 2 монитора, то запускаем приложение в полноэкранном режиме на 2м мониторе   
 		// Создаем графический контекст (окно)
@@ -103,6 +102,7 @@ void Application::InitContext()
 
 void Application::InitGL()
 {
+	// helps developers initialize extensions and write portable applications
 	glewExperimental = GL_TRUE;
 	glewInit();
 
@@ -118,6 +118,7 @@ void Application::InitGL()
 void Application::MakeScene()
 {
 	// Устанавливаем камеру
+	// Смотрим перпендикулярно XZ
 	camera.viewMatrix = glm::lookAt( glm::vec3( 0.0f, -1.0f, 0.0f ), glm::vec3( 0.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ) );
 	// Перспективное проецирование (чем дальше объект, тем он меньше выглядит)
 	camera.projMatrix = glm::perspective( glm::radians( 45.0f ), 4.0f / 3.0f, 0.1f, 100.f );

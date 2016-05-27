@@ -69,15 +69,6 @@ public:
         glBindTexture(_target, 0);
     }
 
-    /**
-    Прикрепляет текстуру к фреймбуферу (разбирается на 7м семинаре)
-    */
-    void attachToFramebuffer(GLenum attachment)
-    {
-        glBindTexture(_target, _tex);        
-        glFramebufferTexture(GL_FRAMEBUFFER, attachment, _tex, 0);
-        glBindTexture(_target, 0);
-    }
 
     void bind() const
     {

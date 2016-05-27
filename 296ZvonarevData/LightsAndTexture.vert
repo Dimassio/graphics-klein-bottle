@@ -1,8 +1,3 @@
-/**
-Пофрагментное освещение несколькими источниками света
-Копирует на выход текстурные координаты.
-*/
-
 #version 330
 
 //стандартные матрицы для преобразования координат
@@ -23,7 +18,9 @@ out vec2 texCoord; //текстурные координаты
 
 void main()
 {
+        // Текстурные координаты просто передаем дальше в фрагментный шейдер
         texCoord = vertexTexCoord;
+
 	posCamSpace = viewMatrix * modelMatrix * vec4(vertexPosition, 1.0); //преобразование координат вершины в систему координат камеры
 	normalCamSpace = normalize(normalToCameraMatrix * vertexNormal); //преобразование нормали в систему координат камеры
         if( dot(normalCamSpace, -posCamSpace.xyz) < 0) {

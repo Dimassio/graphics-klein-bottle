@@ -1,8 +1,3 @@
-/**
-Пофрагментное освещение несколькими источниками света
-+ использование текстуры
-*/
-
 #version 330
 
 uniform sampler2D diffuseTex;
@@ -25,10 +20,13 @@ out vec4 fragColor; //выходной цвет фрагмента
 
 
 const vec3 Ks = vec3(1.0, 1.0, 1.0); //Коэффициент бликового отражения
+// Размер блика
+// Чем меньше, тем более размазан блик
 const float shininess = 128.0;
 
 void main()
 {
+        // Цвет текстуры в UV координатах
         vec3 diffuseColor = texture(diffuseTex, texCoord).rgb;
 
 	vec3 normal = normalize(normalCamSpace); //нормализуем нормаль после интерполяции
@@ -66,6 +64,7 @@ void main()
         float spotCosCutoff = 0.99f; // Чем больше ->1, тем меньше угол -> тем меньше пятно
         if (spotEffect > spotCosCutoff) {
                 // Характер пятна
+                // Чем больше, тем меньше видны границы
                 float spotExponent = 16.0f;
                 spotEffect = pow(spotEffect, spotExponent);
 
